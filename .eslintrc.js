@@ -13,6 +13,7 @@ module.exports = {
     'react/prop-types': 'error',
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+    'react/destructuring-assignment': ['error', 'always', { ignoreClassFields: true }],
     'comma-dangle': ['error', 'never']
   },
   globals: {
