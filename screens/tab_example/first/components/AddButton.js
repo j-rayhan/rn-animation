@@ -68,7 +68,6 @@ class AddButton extends Component {
  }
 
  render() {
-   // eslint-disable react/destructuring-assignment
    const sizeStyle = {
      transform: [{ scale: this.buttonSize }]
    };
