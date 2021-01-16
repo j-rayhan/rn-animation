@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 //
 import Auth from './screens/login/first/HomeScreen';
 import HomeScreen from './screens/tab_example/first/HomeScreen';
+import StickMenu from './screens/tab_example/StickMenuScreen';
 import TabBasickScreen from './screens/tab_example/second/HomeScreen';
 
 function NotificationsScreen({ navigation }) {
@@ -33,10 +34,11 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator initialRouteName="Stick Menu">
         <Drawer.Screen name="Home" component={TabBasickScreen} />
         <Drawer.Screen name="Auth" component={Auth} />
         <Drawer.Screen name="HomeFirst" component={HomeScreen} />
+        <Drawer.Screen name="Stick Menu" component={StickMenu} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
