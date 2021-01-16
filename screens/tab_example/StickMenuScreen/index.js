@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   bottomActions: {
     height: 80,
-    backgroundColor: 'rgba(225,225,225, .80)',
+    backgroundColor: 'rgba(225,225,225, .90)',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row'
@@ -71,7 +71,7 @@ export default () => {
  const scrollY = React.useRef(new Animated.Value(0)).current;
 
  const topEdge = bottomAction?.y - height + bottomAction?.height;
-
+ const inputRange = [-1, 0, topEdge - 30, topEdge, topEdge + 1 ];
  return (
   <SafeAreaView>
     <StatusBar hidden />
@@ -121,7 +121,7 @@ export default () => {
       paddingHorizontal: 10,
       transform: [{
        translateY: scrollY.interpolate({
-        inputRange: [-1, 0, topEdge - 1, topEdge, topEdge + 1 ],
+        inputRange,
         outputRange: [ 0, 0, 0, 0, -1 ]
        })
       }]
@@ -132,7 +132,16 @@ export default () => {
       }}
       >
         <Entypo name="adjust" size={24} color="black" style={{ marginHorizontal: 10 }} />
-        <Text>326</Text>
+        <Animated.Text
+         style={{
+          opacity: scrollY.interpolate({
+           inputRange,
+           outputRange: [ 0, 0, 0, 1, 1 ]
+          })
+         }}
+        >
+         326
+        </Animated.Text>
       </View>
       <View style={{ flexDirection: 'row', alignContent: 'center' }}>
         <View style={[styles.icon]}>
