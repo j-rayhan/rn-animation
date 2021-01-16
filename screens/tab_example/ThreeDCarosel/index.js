@@ -86,12 +86,17 @@ const Content = ({ item }) => {
 };
 
 export default () => {
+ const scrollX = React.useRef(new Animated.Value(0)).current;
     return (
         <View style={{ backgroundColor: '#A5F1FA', flex: 1 }}>
             <StatusBar hidden />
             <SafeAreaView style={{ marginTop: SPACING * 4 }}>
                 <View style={{ height: IMAGE_HEIGHT * 2.1 }}>
-                    <FlatList
+                    <Animated.FlatList
+                        onScroll={Animated.event([
+                         { nativeEvent: {contentOffset: {x: scrollX}}}],
+                         {useNativeDriver: true}
+                        )}
                         data={DATA}
                         keyExtractor={(item) => item.key}
                         horizontal
@@ -101,18 +106,28 @@ export default () => {
                         contentContainerStyle={{ height: IMAGE_HEIGHT + SPACING * 2, paddingHorizontal: SPACING * 2 }}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item, index }) => {
+                         const inputRange = [
+                          (index - 1) * width,
+                          index * width,
+                          (index + 1) * width
+                         ];
+                         const opacity = scrollX.interpolate({
+                          inputRange,
+                          outputRange: [ 0, 1, 0]
+                         })
                             return (
-                                <View
+                                <Animated.View
                                     style={{
                                         width,
                                         paddingVertical: SPACING,
+                                        opacity
                                     }}
                                 >
                                     <Image
                                         source={{ uri: item.image }}
                                         style={{ width: IMAGE_WIDTH, height: IMAGE_HEIGHT, resizeMode: 'cover' }}
                                     />
-                                </View>
+                                </Animated.View>
                             );
                         }}
                     />
@@ -131,7 +146,7 @@ export default () => {
                             width: IMAGE_WIDTH + SPACING * 2,
                             position: 'absolute',
                             backgroundColor: 'white',
-                            backfaceVisibility: true,
+                            backfaceVisibility: 'visible',
                             zIndex: -1,
                             top: SPACING * 2,
                             left: SPACING,
