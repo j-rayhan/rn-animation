@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
-  Image, Text, View, Dimensions, StyleSheet, StatusBar
+  Image, Text, Animated, View, Dimensions, StyleSheet, StatusBar
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Entypo } from '@expo/vector-icons';
-// import Constants from 'expo-constants';
-import { ScrollView } from 'react-native-gesture-handler';
+import Constants from 'expo-constants';
 
-const { height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 const articleParagraphs = [
   'One advanced diverted domestic sex repeated bringing you old. Possible procured her trifling laughter thoughts property she met way. Companions shy had solicitude favourable own. Which could saw guest man now heard but. Lasted my coming uneasy marked so should. Gravity letters it amongst herself dearest an windows by. Wooded ladies she basket season age her uneasy saw. Discourse unwilling am no described dejection incommode no listening of. Before nature his parish boy. ',
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
   },
   bottomActions: {
     height: 80,
-    backgroundColor: 'red',
+    backgroundColor: 'rgba(225,225,225, .80)',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row'
@@ -67,10 +66,22 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => (
+export default () => {
+ const [bottomAction, setBottomActions] = React.useState(null);
+ const scrollY = React.useRef(new Animated.Value(0)).current;
+
+ const topEdge = bottomAction?.y - height + bottomAction?.height;
+
+ return (
   <SafeAreaView>
     <StatusBar hidden />
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
+    <Animated.ScrollView
+     onScroll={Animated.event(
+      [{nativeEvent: {contentOffset: {y: scrollY}}}],
+      {useNativeDriver: true}
+     )}
+     contentContainerStyle={{ padding: 20 }}
+    >
       <Text style={styles.heading}>Black & White</Text>
       {
               articleParagraphs.map((text, index) => {
@@ -87,7 +98,7 @@ export default () => (
                 );
               })
              }
-      <View style={styles.bottomActions} />
+      <View onLayout={ev => setBottomActions(ev.nativeEvent.layout)} style={[styles.bottomActions, { backgroundColor: 'red'}]} />
       <Text style={styles.featuredTitle}>Featured</Text>
       {
               articleParagraphs.slice(0, 3).map((text, index) => {
@@ -100,13 +111,20 @@ export default () => (
                 );
               })
              }
-    </ScrollView>
-    <View style={[styles.bottomActions, {
+    </Animated.ScrollView>
+    { bottomAction && (
+     <Animated.View style={[styles.bottomActions, {
       position: 'absolute',
       left: 0,
       right: 0,
       bottom: 0,
-      paddingHorizontal: 20
+      paddingHorizontal: 10,
+      transform: [{
+       translateY: scrollY.interpolate({
+        inputRange: [-1, 0, topEdge - 1, topEdge, topEdge + 1 ],
+        outputRange: [ 0, 0, 0, 0, -1 ]
+       })
+      }]
     }]}
     >
       <View style={{
@@ -127,6 +145,7 @@ export default () => (
           <Entypo name="share-alternative" size={24} color="black" />
         </View>
       </View>
-    </View>
-  </SafeAreaView>
-);
+    </Animated.View>
+    )}
+    </SafeAreaView>
+)};
