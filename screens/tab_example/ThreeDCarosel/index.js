@@ -114,13 +114,19 @@ export default () => {
                          const opacity = scrollX.interpolate({
                           inputRange,
                           outputRange: [ 0, 1, 0]
+                         });
+
+                         const translateY = scrollX.interpolate({
+                          inputRange,
+                          outputRange: [ 50, 0, 20]
                          })
                             return (
                                 <Animated.View
                                     style={{
                                         width,
                                         paddingVertical: SPACING,
-                                        opacity
+                                        opacity,
+                                        transform: [{translateY}]
                                     }}
                                 >
                                     <Image
