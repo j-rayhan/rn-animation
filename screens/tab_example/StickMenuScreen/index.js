@@ -5,9 +5,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Entypo } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 
-const { width, height } = Dimensions.get('screen');
+const { height } = Dimensions.get('screen');
 
 const articleParagraphs = [
   'One advanced diverted domestic sex repeated bringing you old. Possible procured her trifling laughter thoughts property she met way. Companions shy had solicitude favourable own. Which could saw guest man now heard but. Lasted my coming uneasy marked so should. Gravity letters it amongst herself dearest an windows by. Wooded ladies she basket season age her uneasy saw. Discourse unwilling am no described dejection incommode no listening of. Before nature his parish boy. ',
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
   },
   bottomActions: {
     height: 80,
-    backgroundColor: 'rgba(225,225,225, .90)',
+    backgroundColor: 'rgba(225,225,225, 1)',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row'
@@ -67,23 +66,29 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
- const [bottomAction, setBottomActions] = React.useState(null);
- const scrollY = React.useRef(new Animated.Value(0)).current;
+  const [bottomAction, setBottomActions] = React.useState(null);
+  const scrollY = React.useRef(new Animated.Value(0)).current;
 
- const topEdge = bottomAction?.y - height + bottomAction?.height;
- const inputRange = [-1, 0, topEdge - 30, topEdge, topEdge + 1 ];
- return (
-  <SafeAreaView>
-    <StatusBar hidden />
-    <Animated.ScrollView
-     onScroll={Animated.event(
-      [{nativeEvent: {contentOffset: {y: scrollY}}}],
-      {useNativeDriver: true}
-     )}
-     contentContainerStyle={{ padding: 20 }}
-    >
-      <Text style={styles.heading}>Black & White</Text>
-      {
+  const topEdge = bottomAction?.y - height + bottomAction?.height;
+  const inputRange = [-1, 0, topEdge - 60, topEdge, topEdge + 1];
+  const textOpacity = {
+    opacity: scrollY.interpolate({
+      inputRange,
+      outputRange: [0, 0, 0, 1, 1]
+    })
+  };
+  return (
+    <SafeAreaView>
+      <StatusBar hidden />
+      <Animated.ScrollView
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        contentContainerStyle={{ padding: 20 }}
+      >
+        <Text style={styles.heading}>Black & White</Text>
+        {
               articleParagraphs.map((text, index) => {
                 const key = `artical-${index}`;
                 return (
@@ -98,9 +103,9 @@ export default () => {
                 );
               })
              }
-      <View onLayout={ev => setBottomActions(ev.nativeEvent.layout)} style={[styles.bottomActions, { backgroundColor: 'red'}]} />
-      <Text style={styles.featuredTitle}>Featured</Text>
-      {
+        <View onLayout={(ev) => setBottomActions(ev.nativeEvent.layout)} style={[styles.bottomActions, { backgroundColor: 'red' }]} />
+        <Text style={styles.featuredTitle}>Featured</Text>
+        {
               articleParagraphs.slice(0, 3).map((text, index) => {
                 const key = `featured-${index}`;
                 return (
@@ -111,50 +116,52 @@ export default () => {
                 );
               })
              }
-    </Animated.ScrollView>
-    { bottomAction && (
-     <Animated.View style={[styles.bottomActions, {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      paddingHorizontal: 10,
-      transform: [{
-       translateY: scrollY.interpolate({
-        inputRange,
-        outputRange: [ 0, 0, 0, 0, -1 ]
-       })
-      }]
-    }]}
-    >
-      <View style={{
-        flexDirection: 'row', height: 60, alignItems: 'center', justifyContent: 'center'
-      }}
-      >
-        <Entypo name="adjust" size={24} color="black" style={{ marginHorizontal: 10 }} />
-        <Animated.Text
-         style={{
-          opacity: scrollY.interpolate({
-           inputRange,
-           outputRange: [ 0, 0, 0, 1, 1 ]
+      </Animated.ScrollView>
+      { bottomAction && (
+      <Animated.View style={[styles.bottomActions, {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        paddingHorizontal: 10,
+        transform: [{
+          translateY: scrollY.interpolate({
+            inputRange,
+            outputRange: [0, 0, 0, 0, -1]
           })
-         }}
+        }]
+      }]}
+      >
+        <View style={{
+          flexDirection: 'row', height: 60, alignItems: 'center', justifyContent: 'center'
+        }}
         >
-         326
-        </Animated.Text>
-      </View>
-      <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-        <View style={[styles.icon]}>
-          <Entypo name="export" size={24} color="black" />
+          <Entypo name="adjust" size={24} color="black" style={{ marginHorizontal: 10 }} />
+          <Animated.Text style={textOpacity}>
+            326
+          </Animated.Text>
         </View>
-        <View style={[styles.icon]}>
-          <Entypo name="credit" size={24} color="green" />
+        <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+          <Animated.View style={[styles.icon, textOpacity]}>
+            <Entypo name="export" size={24} color="black" />
+          </Animated.View>
+          <Animated.View style={[styles.icon, {
+            transform: [{
+              translateX: scrollY.interpolate({
+                inputRange,
+                outputRange: [60, 60, 60, 0, 0]
+              })
+            }]
+          }]}
+          >
+            <Entypo name="credit" size={24} color="green" />
+          </Animated.View>
+          <Animated.View style={[styles.icon, textOpacity]}>
+            <Entypo name="share-alternative" size={24} color="black" />
+          </Animated.View>
         </View>
-        <View style={[styles.icon]}>
-          <Entypo name="share-alternative" size={24} color="black" />
-        </View>
-      </View>
-    </Animated.View>
-    )}
+      </Animated.View>
+      )}
     </SafeAreaView>
-)};
+  );
+};
