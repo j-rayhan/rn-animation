@@ -87,6 +87,8 @@ const Content = ({ item }) => {
 
 export default () => {
  const scrollX = React.useRef(new Animated.Value(0)).current;
+ const progress = Animated.modulo((Animated.divide(scrollX, width)), width);
+
     return (
         <View style={{ backgroundColor: '#A5F1FA', flex: 1 }}>
             <StatusBar hidden />
@@ -102,7 +104,7 @@ export default () => {
                         horizontal
                         pagingEnabled
                         bounces={false}
-                        style={{ flexGrow: 0 }}
+                        style={{ flexGrow: 0, zIndex: 9999 }}
                         contentContainerStyle={{ height: IMAGE_HEIGHT + SPACING * 2, paddingHorizontal: SPACING * 2 }}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item, index }) => {
@@ -143,11 +145,39 @@ export default () => {
                             alignItems: 'center',
                             paddingHorizontal: SPACING * 2,
                             marginLeft: SPACING * 2,
+                            zIndex: 99
                         }}
                     >
-                        <Content item={DATA[0]} />
+                        {DATA.map((item, index) => {
+                         const inputRange = [
+                          (index - 0.2) * width,
+                          index * width,
+                          (index + 0.2) * width
+                         ];
+                         const opacity = scrollX.interpolate({
+                          inputRange,
+                          outputRange: [ 0, 1, 0]
+                         });
+
+                            return (
+                                <Animated.View key={item.key} style={{
+                                    position: 'absolute',
+                                    opacity,
+                                    transform: [{
+                                     perspective: IMAGE_WIDTH * 4
+                                    }, {
+                                     rotateY: scrollX.interpolate({
+                                      inputRange,
+                                      outputRange: ['45deg', '0deg', '45deg']
+                                     })
+                                    }]
+                                }}>
+                                    <Content item={item} />
+                                </Animated.View>
+                            )
+                        })}
                     </View>
-                    <View
+                    <Animated.View
                         style={{
                             width: IMAGE_WIDTH + SPACING * 2,
                             position: 'absolute',
@@ -164,6 +194,14 @@ export default () => {
                                 width: 0,
                                 height: 0,
                             },
+                            transform: [{
+                             perspective: IMAGE_WIDTH * 4
+                            }, {
+                             rotateY: progress.interpolate({
+                              inputRange: [ 0, 0.5, 1],
+                              outputRange: ['0deg', '90deg', '180deg']
+                             })
+                            }]
                         }}
                     />
                 </View>
