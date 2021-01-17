@@ -69,9 +69,9 @@ export default () => {
   const [bottomAction, setBottomActions] = React.useState(null);
   const scrollY = React.useRef(new Animated.Value(0)).current;
 
-  const topEdge = bottomAction?.y - height + bottomAction?.height;
+  const topEdge = (bottomAction?.y - height + bottomAction?.height);
   const inputRange = [-1, 0, topEdge - 60, topEdge, topEdge + 1];
-  const textOpacity = {
+  const textOpacity = bottomAction && {
     opacity: scrollY.interpolate({
       inputRange,
       outputRange: [0, 0, 0, 1, 1]
