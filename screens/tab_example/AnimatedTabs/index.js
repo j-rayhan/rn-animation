@@ -32,17 +32,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-const Indicator = ({measure, scrollX}) => (
-  <Animated.View style={{
-    width: measure[3].width,
-    left: measure[3].x,
-    height: 4,
-    position: 'absolute',
-    top: 25,
-    backgroundColor: 'white'
-  }}
-  />
-)
+const Indicator = ({measures, scrollX}) => {
+  const inputRange = data.map((_, index) => index * width); // [0, width, width * 2, width * 3, .....]
+  const indicatorWidth = scrollX.interpolate({
+    inputRange,
+    outputRange: measures.map(m => m.width)
+  })
+  return (
+    <Animated.View style={{
+      width: indicatorWidth,
+      left: 0,
+      height: 4,
+      position: 'absolute',
+      top: 25,
+      backgroundColor: 'white'
+    }}
+    />
+  )
+}
 const Tab = React.forwardRef(({ title }, ref) => {
   return (
     <View ref={ref}>
@@ -52,13 +59,13 @@ const Tab = React.forwardRef(({ title }, ref) => {
 })
 const Tabs = ({ data, scrollX }) => {
   const containerRef = React.useRef();
-  const [measure, setMeasure] = React.useState([])
+  const [measures, setMeasures] = React.useState([])
    React.useEffect(() => {
      let m = []
     data.forEach(item => {
       item.ref.current.measureLayout(containerRef.current, (x, y, width, height)=>{
         m.push({x, y, width, height})
-        if (m.length === data.length) setMeasure(m);
+        if (m.length === data.length) setMeasures(m);
       })
     });
   }, [data]);
@@ -78,7 +85,7 @@ const Tabs = ({ data, scrollX }) => {
           )
         })}
       </View>
-      { measure.length > 0 && <Indicator {...{measure, scrollX}} />}
+      { measures.length > 0 && <Indicator {...{measures, scrollX}} />}
     </View >
   )
 }
