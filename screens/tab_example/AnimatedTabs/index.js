@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 
-import { StyleSheet, Text, View, Dimensions, FlatList, Animated, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Animated, Image, TouchableOpacity } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -57,14 +57,16 @@ const Indicator = ({measures, scrollX}) => {
     />
   )
 }
-const Tab = React.forwardRef(({ title }, ref) => {
+const Tab = React.forwardRef(({ title, onTabClick }, ref) => {
   return (
-    <View ref={ref}>
-      <Text style={{ color: 'white', fontWeight: '800', textTransform: 'uppercase', fontFamily: 'Menlo', fontStyle: 'italic', fontSize: 16 }}>{title}</Text>
-    </View>
+    <TouchableOpacity onPress={onTabClick}>
+      <View ref={ref}>
+        <Text style={{ color: 'white', fontWeight: '800', textTransform: 'uppercase', fontFamily: 'Menlo', fontStyle: 'italic', fontSize: 16 }}>{title}</Text>
+      </View>
+    </TouchableOpacity>
   )
 })
-const Tabs = ({ data, scrollX }) => {
+const Tabs = ({ data, scrollX, onTabClick }) => {
   const containerRef = React.useRef();
   const [measures, setMeasures] = React.useState([])
    React.useEffect(() => {
@@ -86,9 +88,9 @@ const Tabs = ({ data, scrollX }) => {
           flex: 1,
           width,
         }}>
-        {data.map(({ key, title, ref }) => {
+        {data.map(({ key, title, ref }, index) => {
           return (
-            <Tab key={key} title={title} ref={ref} />
+            <Tab key={key} title={title} ref={ref} onTabClick={() => onTabClick(index)} />
           )
         })}
       </View>
@@ -98,11 +100,17 @@ const Tabs = ({ data, scrollX }) => {
 }
 export default function App() {
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const ref = React.useRef(0);
+  const onTabClick = React.useCallback( itemIndex => {
+    ref?.current?.scrollToOffset({
+      offset: itemIndex * width,
+    })
+  })
   return (
     <View style={styles.container}>
       <StatusBar hidden />
-
       <Animated.FlatList
+        ref={ref}
         data={data}
         keyExtractor={item => item.key}
         horizontal
@@ -124,7 +132,7 @@ export default function App() {
           )
         }}
       />
-      <Tabs data={data} scrollX={scrollX} />
+      <Tabs data={data} scrollX={scrollX} onTabClick={onTabClick} />
     </View>
   );
 }
