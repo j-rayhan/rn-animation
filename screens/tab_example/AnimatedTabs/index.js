@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { useFonts } from 'expo-font';
 
 import { StyleSheet, Text, View, Dimensions, FlatList, Animated, Image } from 'react-native';
 
@@ -32,34 +31,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-const Tab = ({title}) => (
+const Indicator  = () => (
+  <View style={{
+    width: 100,
+    height: 4,
+    position: 'absolute',
+    top: 25,
+    backgroundColor: 'white'
+  }}
+  />
+)
+const Tab = ({ title }) => (
   <View>
-    <View>
-      <Text style={{ fontFamily: 'Menlo', fontStyle: 'italic', fontSize: 12 }}>{title}</Text>
-    </View>
+    <Text style={{ color: 'white', fontWeight: '800', textTransform: 'uppercase', fontFamily: 'Menlo', fontStyle: 'italic', fontSize: 16 }}>{title}</Text>
   </View>
 )
-const Tabs = ({ data, scrollX}) => {
+const Tabs = ({ data, scrollX }) => {
   return (
-    <View>
-      <View>
-        {data.map(({key, title}) => {
+    <View style={{ position: 'absolute', top: 100 }}>
+      <View style={{
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        flex: 1,
+        width,
+      }}>
+        {data.map(({ key, title }) => {
           return (
             <Tab key={key} title={title} />
           )
         })}
       </View>
+      <Indicator />
     </View>
   )
 }
 export default function App() {
-  // const [loaded] = useFonts({
-  //   Menlo: require('../../../assets/fonts/Menlo-Regular.ttf'),
-  // });
-
-  // if (!loaded) {
-  //   return null;
-  // }
   const scrollX = React.useRef(new Animated.Value(0)).current;
   return (
     <View style={styles.container}>
@@ -72,22 +78,22 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         onScroll={Animated.event(
-          [{nativeEvent: { contentOffset: {x: scrollX}}}],
-          {useNativeDriver: false}
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false }
         )}
         renderItem={({ item }) => {
           return (
-            <View style={{ width, height}}>
+            <View style={{ width, height }}>
               <Image
                 source={{ uri: item.image }}
                 style={{ flex: 1, resizeMode: 'cover' }}
               />
-              <View style={[StyleSheet.absoluteFillObject, {backgroundColor: 'rgba(0,0,0,0.3)'}]} />
+              <View style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgba(0,0,0,0.3)' }]} />
             </View>
           )
         }}
       />
-      <Tabs data={data} scrollX={scrollX}/>
+      <Tabs data={data} scrollX={scrollX} />
     </View>
   );
 }

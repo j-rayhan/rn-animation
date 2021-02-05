@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useFonts } from 'expo-font';
 import {
   Text,
   View,
@@ -34,6 +35,13 @@ NotificationsScreen.propTypes = {
 const Drawer = createDrawerNavigator();
 
 export default function App() {
+const [loaded] = useFonts({
+    Menlo: require('./assets/fonts/Menlo-Regular.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Tabs">
