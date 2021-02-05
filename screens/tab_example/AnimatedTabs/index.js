@@ -38,6 +38,10 @@ const Indicator = ({measures, scrollX}) => {
     inputRange,
     outputRange: measures.map(m => m.width)
   })
+  const translateX = scrollX.interpolate({
+    inputRange,
+    outputRange: measures.map(m => m.x)
+  })
   return (
     <Animated.View style={{
       width: indicatorWidth,
@@ -45,7 +49,10 @@ const Indicator = ({measures, scrollX}) => {
       height: 4,
       position: 'absolute',
       top: 25,
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      transform: [{
+        translateX
+      }]
     }}
     />
   )
