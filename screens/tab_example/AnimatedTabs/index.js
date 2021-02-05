@@ -32,9 +32,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-const Indicator = () => (
-  <View style={{
-    width: 100,
+const Indicator = ({measure, scrollX}) => (
+  <Animated.View style={{
+    width: measure[3].width,
+    left: measure[3].x,
     height: 4,
     position: 'absolute',
     top: 25,
@@ -57,10 +58,10 @@ const Tabs = ({ data, scrollX }) => {
     data.forEach(item => {
       item.ref.current.measureLayout(containerRef.current, (x, y, width, height)=>{
         m.push({x, y, width, height})
+        if (m.length === data.length) setMeasure(m);
       })
-      if (m.length === data.length) setMeasure(m);
-    })
-  }, [data])
+    });
+  }, [data]);
   return (
     <View style={{ position: 'absolute', top: 100 }}>
       <View
@@ -77,7 +78,7 @@ const Tabs = ({ data, scrollX }) => {
           )
         })}
       </View>
-      <Indicator />
+      { measure.length > 0 && <Indicator {...{measure, scrollX}} />}
     </View >
   )
 }
