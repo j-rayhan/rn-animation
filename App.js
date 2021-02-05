@@ -12,6 +12,7 @@ import Auth from './screens/login/first/HomeScreen';
 import HomeScreen from './screens/tab_example/first/HomeScreen';
 import StickMenu from './screens/tab_example/StickMenuScreen';
 import TDCarosel from './screens/tab_example/ThreeDCarosel';
+import AnimatedTabs from './screens/tab_example/AnimatedTabs';
 import TabBasickScreen from './screens/tab_example/second/HomeScreen';
 
 function NotificationsScreen({ navigation }) {
@@ -35,12 +36,13 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="3D carosel">
+      <Drawer.Navigator initialRouteName="Tabs">
         <Drawer.Screen name="Home" component={TabBasickScreen} />
         <Drawer.Screen name="Auth" component={Auth} />
         <Drawer.Screen name="HomeFirst" component={HomeScreen} />
         <Drawer.Screen name="Stick Menu" component={StickMenu} />
         <Drawer.Screen name="3D carosel" component={TDCarosel} />
+        <Drawer.Screen name="Tabs" component={AnimatedTabs} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
