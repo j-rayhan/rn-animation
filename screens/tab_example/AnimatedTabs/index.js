@@ -21,6 +21,7 @@ const data = Object.keys(images).map((i) => ({
   key: i,
   title: i,
   image: images[i],
+  ref: React.createRef(),
 }));
 
 const styles = StyleSheet.create({
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-const Indicator  = () => (
+const Indicator = () => (
   <View style={{
     width: 100,
     height: 4,
@@ -41,28 +42,43 @@ const Indicator  = () => (
   }}
   />
 )
-const Tab = ({ title }) => (
-  <View>
-    <Text style={{ color: 'white', fontWeight: '800', textTransform: 'uppercase', fontFamily: 'Menlo', fontStyle: 'italic', fontSize: 16 }}>{title}</Text>
-  </View>
-)
+const Tab = React.forwardRef(({ title }, ref) => {
+  return (
+    <View ref={ref}>
+      <Text style={{ color: 'white', fontWeight: '800', textTransform: 'uppercase', fontFamily: 'Menlo', fontStyle: 'italic', fontSize: 16 }}>{title}</Text>
+    </View>
+  )
+})
 const Tabs = ({ data, scrollX }) => {
+  const containerRef = React.useRef();
+  const [measure, setMeasure] = React.useState([])
+   React.useEffect(() => {
+     let m = []
+    data.forEach(item => {
+      item.ref.current.measureLayout(containerRef.current, (x, y, width, height)=>{
+        m.push({x, y, width, height})
+      })
+      if (m.length === data.length) setMeasure(m);
+    })
+  }, [data])
   return (
     <View style={{ position: 'absolute', top: 100 }}>
-      <View style={{
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-        flex: 1,
-        width,
-      }}>
-        {data.map(({ key, title }) => {
+      <View
+        ref={containerRef}
+        style={{
+          justifyContent: 'space-evenly',
+          flexDirection: 'row',
+          flex: 1,
+          width,
+        }}>
+        {data.map(({ key, title, ref }) => {
           return (
-            <Tab key={key} title={title} />
+            <Tab key={key} title={title} ref={ref} />
           )
         })}
       </View>
       <Indicator />
-    </View>
+    </View >
   )
 }
 export default function App() {
