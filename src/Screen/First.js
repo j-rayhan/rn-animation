@@ -34,7 +34,10 @@ const FirstPage = ({ navigation }) => {
           {/* <View style={{ marginVertical:16}} />
           <Button
             onPress={
-              () => navigation.navigate(Routes.THIRD_PAGE)
+              () => navigation.navigate(Routes.SECOND_PAGE, {
+                screen: Routes.THIRD_PAGE,
+                params: { user: 'jane' },
+              })
             }
             title="Go to Third Page"
           /> */}
