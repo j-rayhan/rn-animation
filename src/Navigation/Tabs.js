@@ -67,24 +67,24 @@ const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
-function HomeStack() {
+function HomeTabs() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
-    </Stack.Navigator>
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Feed" component={FScreen} />
+      <Tab.Screen name="Notifications" component={NScreen} />
+    </Tab.Navigator>
   );
 }
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeStack} />
-        <Tab.Screen name="Feed" component={FScreen} />
-        <Tab.Screen name="Notifications" component={NScreen} />
-    </Tab.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeTabs} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+    </Stack.Navigator>
     </NavigationContainer>
   );
 }
