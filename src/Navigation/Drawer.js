@@ -1,4 +1,4 @@
-// https://aboutreact.com/react-native-navigation-drawer/
+// https://reactnavigation.org/docs/drawer-based-navigation/
 import * as React from 'react';
 import {
   View,
@@ -13,6 +13,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import FirstPage from '../Screen/First';
 import SecondPage from '../Screen/Second';
 import ThirdPage from '../Screen/Third';
+import ROUTES from "./Routes";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,9 +44,9 @@ const NavigationDrawerStructure = (props)=> {
 
 function firstScreenStack({ navigation }) {
   return (
-      <Stack.Navigator initialRouteName="FirstPage">
+      <Stack.Navigator initialRouteName={ROUTES.FIRST_PAGE}>
         <Stack.Screen
-          name="FirstPage"
+          name={ROUTES.FIRST_PAGE}
           component={FirstPage}
           options={{
             title: 'First Page', //Set Header Title
@@ -69,7 +70,7 @@ function firstScreenStack({ navigation }) {
 function secondScreenStack({ navigation }) {
   return (
     <Stack.Navigator
-      initialRouteName="SecondPage"
+      initialRouteName={ROUTES.SECOND_PAGE}
       screenOptions={{
         headerLeft: ()=>
           <NavigationDrawerStructure
@@ -84,14 +85,13 @@ function secondScreenStack({ navigation }) {
         }
       }}>
       <Stack.Screen
-        name="SecondPage"
+        name={ROUTES.SECOND_PAGE}
         component={SecondPage}
         options={{
           title: 'Second Page', //Set Header Title
-          
         }}/>
       <Stack.Screen
-        name="ThirdPage"
+        name={ROUTES.THIRD_PAGE}
         component={ThirdPage}
         options={{
           title: 'Third Page', //Set Header Title
@@ -109,11 +109,11 @@ function DrawerTABS() {
           itemStyle: { marginVertical: 5 },
         }}>
         <Drawer.Screen
-          name="FirstPage"
+          name={ROUTES.FIRST_PAGE}
           options={{ drawerLabel: 'First page Option' }}
           component={firstScreenStack} />
         <Drawer.Screen
-          name="SecondPage"
+          name={ROUTES.SECOND_PAGE}
           options={{ drawerLabel: 'Second page Option' }}
           component={secondScreenStack} />
       </Drawer.Navigator>
