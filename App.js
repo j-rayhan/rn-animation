@@ -6,7 +6,7 @@ import BottomTABS from './src/Navigation/Tabs';
 
 export default function App() {
   return (
-    <DrawerTABS />
+    <BottomTABS />
   )
 }
 
