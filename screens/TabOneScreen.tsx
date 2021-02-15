@@ -34,7 +34,7 @@ export default function TabOneScreen() {
       <Image 
         source={{uri: 'https://user-images.githubusercontent.com/21338587/107904367-cb717800-6f75-11eb-931c-8cd6d2b5e74b.jpg'}}
         style={StyleSheet.absoluteFillObject}
-        blurRadius={80}
+        // blurRadius={80}
       />
       <Animated.FlatList
         data={DATA}
@@ -54,14 +54,20 @@ export default function TabOneScreen() {
             inputRange,
             outputRange: [1,1,1,0]
           });
+          const opacityInputRange = [ -1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 0.5)]
+          const opacity = scrollY.interpolate({
+            inputRange: opacityInputRange,
+            outputRange: [1,1,1,0]
+          });
           return (
-            <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.8', borderRadius: 12, shadowColor: '#000',
+            <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.9', borderRadius: 12, shadowColor: '#000',
             shadowOffset: {
               height: 10,
               width: 0
             },
             shadowOpacity: 1,
             shadowRadius: 20,
+            opacity,
             transform: [{scale}]
             }}>
               <Image
