@@ -22,9 +22,12 @@ const DATA = [...Array(30).keys()].map((_, i) => {
 
 const SPACING = 20;
 const AVATAR_SIZE = 70;
+const ITEM_SIZE = AVATAR_SIZE + SPACING * 3;
 
 
 export default function TabOneScreen() {
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+
   return (
     <View style={styles.container}>
       <StatusBar hidden />
@@ -33,8 +36,12 @@ export default function TabOneScreen() {
         style={StyleSheet.absoluteFillObject}
         blurRadius={80}
       />
-      <FlatList
+      <Animated.FlatList
         data={DATA}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true}
+        )}
         keyExtractor={item => item.key.toString()}
         contentContainerStyle={{
           padding: SPACING,
@@ -42,15 +49,20 @@ export default function TabOneScreen() {
         }}
         renderItem={({ item, index }) => {
           const { image, name, jobTitle, email } = item;
+          const inputRange = [ -1, 0, ITEM_SIZE * index, ITEM_SIZE * (index + 2)]
+          const scale = scrollY.interpolate({
+            inputRange,
+            outputRange: [1,1,1,0]
+          });
           return (
-            <View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.8', borderRadius: 12, shadowColor: '#000',
+            <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.8', borderRadius: 12, shadowColor: '#000',
             shadowOffset: {
               height: 10,
               width: 0
             },
             shadowOpacity: 1,
             shadowRadius: 20,
-            
+            transform: [{scale}]
             }}>
               <Image
                 source={{ uri: image }}
@@ -61,7 +73,7 @@ export default function TabOneScreen() {
                 <Text style={{ fontSize: 14, opacity: .7}}>{jobTitle}</Text>
                 <Text style={{ fontSize: 12, opacity: .8, color: '#0099cc'}}>{email}</Text>
               </View>
-            </View>
+            </Animated.View>
           )
         }}
       />
