@@ -20,7 +20,7 @@ export default function Details({
   navigation, route
 }: StackScreenProps<RootStackParamList, 'USER_DETAILS'>) {
   const { item } = route?.params;
-  const { image, name, jobTitle, email, categories } = item;
+  const { image, name, color, categories } = item;
 
   return (
     <View style={styles.container}>
@@ -35,7 +35,7 @@ export default function Details({
       />
       <View style={[
         StyleSheet.absoluteFillObject, {
-        backgroundColor: '#AAA',
+        backgroundColor: color,
         borderRadius: 0, 
         height: TOP_HEADER_HEIGHT + 32
       }]}
@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
     transform: [{ translateY: TOP_HEADER_HEIGHT }],
     borderRadius: 32,
     padding: SPACING,
-    paddingTop: SPACING + 32
+    paddingTop: SPACING + 32,
+    paddingBottom: TOP_HEADER_HEIGHT
   },
   title: {
     fontSize: 20,
