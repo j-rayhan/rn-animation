@@ -28,20 +28,37 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       <StatusBar hidden />
+      <Image 
+        source={{uri: 'https://user-images.githubusercontent.com/21338587/107904367-cb717800-6f75-11eb-931c-8cd6d2b5e74b.jpg'}}
+        style={StyleSheet.absoluteFillObject}
+        blurRadius={80}
+      />
       <FlatList
         data={DATA}
         keyExtractor={item => item.key.toString()}
+        contentContainerStyle={{
+          padding: SPACING,
+          paddingTop: StatusBar.currentHeight || 42 
+        }}
         renderItem={({ item, index }) => {
           const { image, name, jobTitle, email } = item;
           return (
-            <View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'blue', borderRadius: 12}}>
+            <View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.8', borderRadius: 12, shadowColor: '#000',
+            shadowOffset: {
+              height: 10,
+              width: 0
+            },
+            shadowOpacity: 1,
+            shadowRadius: 20,
+            
+            }}>
               <Image
                 source={{ uri: image }}
                 style={{ width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE, marginRight: SPACING / 2 }}
               />
               <View>
                 <Text style={{ fontSize: 22, fontWeight: '700'}}>{name}</Text>
-                <Text style={{ fontSize: 18, opacity: .7}}>{jobTitle}</Text>
+                <Text style={{ fontSize: 14, opacity: .7}}>{jobTitle}</Text>
                 <Text style={{ fontSize: 12, opacity: .8, color: '#0099cc'}}>{email}</Text>
               </View>
             </View>
@@ -55,6 +72,7 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff'
   },
   title: {
     fontSize: 20,
