@@ -28,12 +28,13 @@ const HEADER_HEIGHT = 100;
 
 export default function TabOneScreen() {
   const scrollY = React.useRef(new Animated.Value(0)).current;
+  const headerY = React.useRef(HEADER_HEIGHT);
 
-  const [scrollAnim] = React.useState(new Animated.Value(0));
+  // const [scrollAnim] = React.useState(new Animated.Value(0));
   const [offsetAnim] = React.useState(new Animated.Value(0));
   const [clampedScroll, setClampedScroll] = React.useState(Animated.diffClamp(
     Animated.add(
-      scrollAnim.interpolate({
+      scrollY.interpolate({
         inputRange: [0, 1],
         outputRange: [0, 1],
         extrapolateLeft: 'clamp'
@@ -47,10 +48,13 @@ export default function TabOneScreen() {
     outputRange: [0, -HEADER_HEIGHT],
     extrapolate: 'clamp'
   });
+  console.log('----------------->', headerY.current);
+  
   return (
     <View style={styles.container}>
       <StatusBar hidden />
       <Animated.View 
+        ref={headerY}
         style={[styles.header, {
           transform: [{ translateY: navbarTranslate }]
         }]}
@@ -59,7 +63,7 @@ export default function TabOneScreen() {
           let {height} = event.nativeEvent.layout;
           setClampedScroll(Animated.diffClamp(
             Animated.add(
-              scrollAnim.interpolate({
+              scrollY.interpolate({
                 inputRange: [0, 1],
                 outputRange: [0, 1],
                 extrapolateLeft: 'clamp'
@@ -79,15 +83,14 @@ export default function TabOneScreen() {
       <Animated.FlatList
         data={DATA}
         contentInset={{ top: HEADER_HEIGHT }}
-        // contentOffset={{ y: -HEADER_HEIGHT }}
         onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollAnim}}}],
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
           {useNativeDriver: true}
         )}
         keyExtractor={item => item.key.toString()}
         contentContainerStyle={{
           padding: SPACING,
-          paddingTop: 100 + (StatusBar.currentHeight || 42) 
+          paddingTop: (StatusBar.currentHeight || 42) 
         }}
         renderItem={({ item, index }) => {
           const { image, name, jobTitle, email } = item;
@@ -125,7 +128,7 @@ export default function TabOneScreen() {
           )
         }}
       />
-    </View>
+  </View>
   );
 }
 
@@ -136,6 +139,7 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 100,
+    // marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'red',
