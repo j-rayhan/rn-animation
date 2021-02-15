@@ -3,18 +3,15 @@
 // Background image: https://www.pexels.com/photo/pink-rose-closeup-photography-1231265/
 import * as React from 'react';
 import { StatusBar, Image, Animated, Text, View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-
-// import { Text, View } from '../components/Themed';
 import faker from 'faker';
+import niceColors from 'nice-color-palettes';
 
 const { width, height } = Dimensions.get('screen');
 
 faker.seed(10);
-
-const detailsIcons = [
-  {color: '#9FD7F1', icon: 'isv'},
-  {color: '#F3B000', icon: 'Trophy'},
-  {color: '#F2988F', icon: 'edit'},
+const colors = [
+  ...niceColors[1].slice(1, niceColors[1].length),
+  ...niceColors[55].slice(0,3),
 ]
 const DATA = [...Array(30).keys()].map((_, i) => {
   return {
@@ -23,6 +20,7 @@ const DATA = [...Array(30).keys()].map((_, i) => {
     name: faker.name.findName(),
     jobTitle: faker.name.jobTitle(),
     email: faker.internet.email(),
+    color: colors[i % colors.length],
     categories: [...Array(3).keys()].map(()=> {
       return {
         key: faker.random.uuid(),
@@ -124,7 +122,7 @@ export default ({navigation}) => {
           });
           return (
             <TouchableOpacity onPress={()=>{ navigation.navigate('USER_DETAILS', {item})}}>
-              <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.9)', borderRadius: 12, shadowColor: '#000',
+              <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: item.color, borderRadius: 12, shadowColor: '#000',
             shadowOffset: {
               height: 10,
               width: 0
@@ -148,7 +146,6 @@ export default ({navigation}) => {
           )
         }}
       />
-      <View style={styles.bg} />
   </View>
   );
 }
@@ -183,12 +180,4 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
-  bg: {
-    position: 'absolute',
-    width,
-    height,
-    backgroundColor: 'blue',
-    transform: [{ translateY: height / 2 }],
-    borderRadius: 32
-  }
 });
