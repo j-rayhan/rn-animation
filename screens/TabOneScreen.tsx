@@ -31,10 +31,15 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       <StatusBar hidden />
+      <View 
+        style={styles.header}
+      >
+        <Text style={styles.headerText}>HEADER</Text>
+      </View>
       <Image 
         source={{uri: 'https://user-images.githubusercontent.com/21338587/107904367-cb717800-6f75-11eb-931c-8cd6d2b5e74b.jpg'}}
         style={StyleSheet.absoluteFillObject}
-        // blurRadius={80}
+        blurRadius={80}
       />
       <Animated.FlatList
         data={DATA}
@@ -45,7 +50,7 @@ export default function TabOneScreen() {
         keyExtractor={item => item.key.toString()}
         contentContainerStyle={{
           padding: SPACING,
-          paddingTop: StatusBar.currentHeight || 42 
+          paddingTop: 100 + (StatusBar.currentHeight || 42) 
         }}
         renderItem={({ item, index }) => {
           const { image, name, jobTitle, email } = item;
@@ -91,6 +96,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
+  },
+  header: {
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    zIndex: 10000
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 20
   },
   title: {
     fontSize: 20,
