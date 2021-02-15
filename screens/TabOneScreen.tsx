@@ -2,7 +2,7 @@
 // Photo by Sharefaith from Pexels
 // Background image: https://www.pexels.com/photo/pink-rose-closeup-photography-1231265/
 import * as React from 'react';
-import { StatusBar, FlatList, Image, Animated, Text, View, Dimensions, StyleSheet, TouchableOpacity, Easing, SafeAreaViewBase, SafeAreaView } from 'react-native';
+import { StatusBar, Image, Animated, Text, View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 
 // import { Text, View } from '../components/Themed';
 import faker from 'faker';
@@ -10,6 +10,12 @@ import faker from 'faker';
 const { width, height } = Dimensions.get('screen');
 
 faker.seed(10);
+
+const detailsIcons = [
+  {color: '#9FD7F1', icon: 'isv'},
+  {color: '#F3B000', icon: 'Trophy'},
+  {color: '#F2988F', icon: 'edit'},
+]
 const DATA = [...Array(30).keys()].map((_, i) => {
   return {
     key: faker.random.uuid(),
@@ -17,6 +23,13 @@ const DATA = [...Array(30).keys()].map((_, i) => {
     name: faker.name.findName(),
     jobTitle: faker.name.jobTitle(),
     email: faker.internet.email(),
+    categories: [...Array(3).keys()].map(()=> {
+      return {
+        key: faker.random.uuid(),
+        title: faker.name.jobTitle(),
+        subcats: [...Array(3).keys()].map(faker.name.jobType)
+      }
+    })
   };
 });
 
@@ -26,7 +39,7 @@ const ITEM_SIZE = AVATAR_SIZE + SPACING * 3;
 const HEADER_HEIGHT = 100;
 
 
-export default function TabOneScreen() {
+export default ({navigation}) => {
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const headerY = React.useRef(HEADER_HEIGHT);
 
@@ -110,7 +123,8 @@ export default function TabOneScreen() {
             outputRange: [1,1,1,0]
           });
           return (
-            <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.9)', borderRadius: 12, shadowColor: '#000',
+            <TouchableOpacity onPress={()=>{ navigation.navigate('USER_DETAILS', {item})}}>
+              <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.9)', borderRadius: 12, shadowColor: '#000',
             shadowOffset: {
               height: 10,
               width: 0
@@ -129,10 +143,12 @@ export default function TabOneScreen() {
                 <Text style={{ fontSize: 14, opacity: .7}}>{jobTitle}</Text>
                 <Text style={{ fontSize: 12, opacity: .8, color: '#0099cc'}}>{email}</Text>
               </View>
-            </Animated.View>
+            </Animated.View>  
+            </TouchableOpacity>
           )
         }}
       />
+      <View style={styles.bg} />
   </View>
   );
 }
@@ -167,4 +183,12 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  bg: {
+    position: 'absolute',
+    width,
+    height,
+    backgroundColor: 'blue',
+    transform: [{ translateY: height / 2 }],
+    borderRadius: 32
+  }
 });
