@@ -1,11 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, ScrollView } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 import { RootStackParamList } from '../types';
 import { AntDesign } from '@expo/vector-icons';
 const { width, height } = Dimensions.get('screen');
-
+const DURATION = 500;
 const SPACING = 20;
 const ITEM_HEIGHT = height * 0.18;
 const TOP_HEADER_HEIGHT = height * 0.3;
@@ -49,16 +50,22 @@ export default function Details({
           <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: SPACING + 32, marginVertical: SPACING }}>
           {detailsIcons.map((item, i) => {
             return (
-              <View key={`${item.icon}-${i}`} style={{ justifyContent: 'center', alignItems: 'center', height: 42, width: 42, borderRadius: 42, backgroundColor: item.color }}>
+              <Animatable.View
+                animation='bounceIn'
+                delay={DURATION + i * 100}
+              key={`${item.icon}-${i}`} style={{ justifyContent: 'center', alignItems: 'center', height: 42, width: 42, borderRadius: 42, backgroundColor: item.color }}>
                 <AntDesign name={item.icon} size={16} color={'white'} />
-              </View>
+              </Animatable.View>
             )
           })}
           </View>
           <View>
             {categories.map((item, index) => {
               return (
-                <View key={item.key} style={{marginVertical: SPACING}}>
+                <Animatable.View
+                animation='fadeInUp'
+                delay={DURATION * 2 + index * 100}
+                key={item.key} style={{marginVertical: SPACING}}>
                   <Text style={styles.title}>{item.title}</Text>
                   {
                     item.subcats.map((subcat, index) => {
@@ -78,7 +85,7 @@ export default function Details({
                       )
                     })
                   }
-                </View>
+                </Animatable.View>
               )
             })}
           </View>
