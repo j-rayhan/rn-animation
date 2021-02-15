@@ -48,7 +48,12 @@ export default function TabOneScreen() {
     outputRange: [0, -HEADER_HEIGHT],
     extrapolate: 'clamp'
   });
-  console.log('----------------->', headerY.current);
+  // const titleTopPadding = clampedScroll.interpolate({
+  //   inputRange: [0, HEADER_HEIGHT],
+  //   outputRange: [0, HEADER_HEIGHT],
+  //   extrapolate: 'clamp',
+  // });
+  // console.log('----------------->', titleTopPadding);
   
   return (
     <View style={styles.container}>
@@ -59,19 +64,19 @@ export default function TabOneScreen() {
           transform: [{ translateY: navbarTranslate }]
         }]}
 
-        onLayout={(event) => {
-          let {height} = event.nativeEvent.layout;
-          setClampedScroll(Animated.diffClamp(
-            Animated.add(
-              scrollY.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 1],
-                extrapolateLeft: 'clamp'
-              }),
-              offsetAnim
-            ), 0, height)
-          );
-        }}
+        // onLayout={(event) => {
+        //   let {height} = event.nativeEvent.layout;
+        //   setClampedScroll(Animated.diffClamp(
+        //     Animated.add(
+        //       scrollY.interpolate({
+        //         inputRange: [0, 1],
+        //         outputRange: [0, 1],
+        //         extrapolateLeft: 'clamp'
+        //       }),
+        //       offsetAnim
+        //     ), 0, height)
+        //   );
+        // }}
       >
         <Text style={styles.headerText}>HEADER</Text>
       </Animated.View>
@@ -90,7 +95,7 @@ export default function TabOneScreen() {
         keyExtractor={item => item.key.toString()}
         contentContainerStyle={{
           padding: SPACING,
-          paddingTop: (StatusBar.currentHeight || 42) 
+          paddingTop: HEADER_HEIGHT + (StatusBar.currentHeight || 42) 
         }}
         renderItem={({ item, index }) => {
           const { image, name, jobTitle, email } = item;
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   header: {
-    height: 100,
+    height: HEADER_HEIGHT,
     // marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
