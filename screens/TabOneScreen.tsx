@@ -60,7 +60,7 @@ export default function TabOneScreen() {
             outputRange: [1,1,1,0]
           });
           return (
-            <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.9', borderRadius: 12, shadowColor: '#000',
+            <Animated.View style={{flexDirection: "row", padding: SPACING, marginBottom: SPACING, backgroundColor: 'rgba(255,255,255,0.9)', borderRadius: 12, shadowColor: '#000',
             shadowOffset: {
               height: 10,
               width: 0
