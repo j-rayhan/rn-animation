@@ -23,19 +23,54 @@ const DATA = [...Array(30).keys()].map((_, i) => {
 const SPACING = 20;
 const AVATAR_SIZE = 70;
 const ITEM_SIZE = AVATAR_SIZE + SPACING * 3;
+const HEADER_HEIGHT = 100;
 
 
 export default function TabOneScreen() {
   const scrollY = React.useRef(new Animated.Value(0)).current;
 
+  const [scrollAnim] = React.useState(new Animated.Value(0));
+  const [offsetAnim] = React.useState(new Animated.Value(0));
+  const [clampedScroll, setClampedScroll] = React.useState(Animated.diffClamp(
+    Animated.add(
+      scrollAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+        extrapolateLeft: 'clamp'
+      }),
+      offsetAnim
+    ), 0, 1
+  ));
+
+  const navbarTranslate = clampedScroll.interpolate({
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT],
+    extrapolate: 'clamp'
+  });
   return (
     <View style={styles.container}>
       <StatusBar hidden />
-      <View 
-        style={styles.header}
+      <Animated.View 
+        style={[styles.header, {
+          transform: [{ translateY: navbarTranslate }]
+        }]}
+
+        onLayout={(event) => {
+          let {height} = event.nativeEvent.layout;
+          setClampedScroll(Animated.diffClamp(
+            Animated.add(
+              scrollAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+                extrapolateLeft: 'clamp'
+              }),
+              offsetAnim
+            ), 0, height)
+          );
+        }}
       >
         <Text style={styles.headerText}>HEADER</Text>
-      </View>
+      </Animated.View>
       <Image 
         source={{uri: 'https://user-images.githubusercontent.com/21338587/107904367-cb717800-6f75-11eb-931c-8cd6d2b5e74b.jpg'}}
         style={StyleSheet.absoluteFillObject}
@@ -43,8 +78,10 @@ export default function TabOneScreen() {
       />
       <Animated.FlatList
         data={DATA}
+        contentInset={{ top: HEADER_HEIGHT }}
+        // contentOffset={{ y: -HEADER_HEIGHT }}
         onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          [{nativeEvent: {contentOffset: {y: scrollAnim}}}],
           {useNativeDriver: true}
         )}
         keyExtractor={item => item.key.toString()}
