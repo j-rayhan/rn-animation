@@ -5,11 +5,12 @@ import { DATA } from '../Config/Travel';
 import BackIcon from '../Components/BackIcon';
 import Icon from '../Components/Icon';
 import { SPACING, width } from '../Config/Theme';
+import { SharedElement } from 'react-navigation-shared-element';
 
-const Detail = ({navigation}) => {
-  const item = DATA[0];
-  const ref = React.useRef();
-  const selectedItemIndex = DATA.findIndex(i => i.id === item.id);
+const Detail = ({route, navigation}) => {
+  const {item} = route.params;
+  const ref = React.useRef(null);
+  const selectedItemIndex = DATA.findIndex(i => i.id === item?.id);
   return (
     <SafeAreaView style={{flex: 1}}>
       <BackIcon onPress={() => navigation.goBack()} />
@@ -28,7 +29,9 @@ const Detail = ({navigation}) => {
                   style={{padding: SPACING}}
                   onPress={()=>{}}
                   >
+                   <SharedElement id={`item.${item.id}.icon`}>
                     <Icon uri={item.imageUri} />
+                    </SharedElement>
                   </TouchableOpacity>
               )
             })
@@ -69,6 +72,12 @@ const Detail = ({navigation}) => {
       />
     </SafeAreaView>
   )
+}
+
+Detail.sharedElements = (route, otherRoute, showing) => {
+  // const { item } = route.params;
+  // return [`item.${item.id}.icon`];
+  return DATA.map(item => `item.${item.id}.icon`);
 }
 
 export default Detail;
