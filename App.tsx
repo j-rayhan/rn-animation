@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from "react-native-screens";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Easing } from 'react-native';
 import List from './src/Screens/List'
 import Details from './src/Screens/Details'
 
@@ -19,8 +19,8 @@ export default function App() {
           options={() => ({
             gestureEnabled: false,
             transitionSpec: {
-              open: { animation: 'timing', config: {duration: 1000}},
-              close: { animation: 'timing', config: {duration: 1000}}
+              open: { animation: 'timing', config: {duration: 500, easing: Easing.inOut(Easing.ease)}},
+              close: { animation: 'timing', config: {duration: 500, easing: Easing.inOut(Easing.ease)}}
             },
             cardStyleInterpolator: ({current: {progress}}) => {
               return {

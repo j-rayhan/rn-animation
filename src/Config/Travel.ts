@@ -13,7 +13,7 @@ const DATA = [
   { imageUri: uri + '548.png', title: 'Turtle', id: '9'},
   { imageUri: uri + '549.png', title: 'Bikini', id: '10'},
   { imageUri: uri + '550.png', title: 'Maracas', id: '11'},
-  // { imageUri: uri + '551.png', title: '', id: '13'},
+  { imageUri: uri + '551.png', title: 'River', id: '12'},
   // { imageUri: uri + '552.png', title: '', id: '14'},
   // { imageUri: uri + '553.png', title: '', id: '15'},
   // { imageUri: uri + '554.png', title: '', id: '16'},
