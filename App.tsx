@@ -1,13 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import { StyleSheet, Text, View } from 'react-native';
+import List from './src/Screens/List'
+import Details from './src/Screens/Details'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <StatusBar hidden />
+        {/* <List /> */}
+        <Details />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
