@@ -43,7 +43,9 @@ const Detail = ({route, navigation}) => {
   const translateX =  animatedIndex.interpolate({
     inputRange: [-1,0,1],
     outputRange: [ size, 0, -size]
-  })
+  });
+  console.log('on press 1', activeIndex);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <BackIcon onPress={() => {
@@ -60,16 +62,36 @@ const Detail = ({route, navigation}) => {
         }}
       >
         {
-            DATA.map((item) => {
+            DATA.map((item, index) => {
+              const inputRange = [ 
+                (index - 1) * size, 
+                index * size, 
+                (index + 1) * size
+              ];
+              const opacity = animatedIndex.interpolate({
+                inputRange,
+                outputRange: [0.3, 1, 0.3],
+                extrapolate: 'clamp'
+              })
               return (
                 <TouchableOpacity
                   key={item.id}
                   style={{padding: SPACING}}
-                  onPress={()=>{}}
+                  onPress={()=>{
+                    activeIndex.setValue(index);
+                    console.log('on press', index);
+                    
+                    // ref?.current?.scrollToIndex({
+                    //   index,
+                    //   animated: true,
+                    // })
+                  }}
                   >
-                   <SharedElement id={`item.${item.id}.icon`}>
-                    <Icon uri={item.imageUri} />
-                    </SharedElement>
+                    <Animated.View style={{ alignItems: 'center',  }}>
+                      <SharedElement id={`item.${item.id}.icon`}>
+                        <Icon uri={item.imageUri} />
+                        </SharedElement>
+                    </Animated.View>
                   </TouchableOpacity>
               )
             })
