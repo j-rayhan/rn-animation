@@ -1,18 +1,19 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, TouchableOpacity, FlatList, ScrollView, Text, Animated } from 'react-native';
+import { View, FlatList, ScrollView, Text, Animated } from 'react-native';
 import { DATA } from '../Config/Travel';
 import BackIcon from '../Components/BackIcon';
 import Icon from '../Components/Icon';
 import { SPACING, width, ICON_SIZE } from '../Config/Theme';
 import { SharedElement } from 'react-navigation-shared-element';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Detail = ({route, navigation}) => {
   const {item} = route.params;
   const ref = React.useRef(null);
   const selectedItemIndex = DATA.findIndex(i => i.id === item?.id);
   const mountedAnimated = React.useRef(new Animated.Value(0)).current;
-  const activeIndex = React.useRef(new Animated.Value(selectedItemIndex)).current;
+  const activeIndex = React.useRef(new Animated.Value(selectedItemIndex));
   const animatedIndex = React.useRef(new Animated.Value(selectedItemIndex)).current;
   
   const animation = ( toValue, delay) => (
@@ -78,8 +79,8 @@ const Detail = ({route, navigation}) => {
                   key={item.id}
                   style={{padding: SPACING}}
                   onPress={()=>{
-                    activeIndex.setValue(index);
-                    console.log('on press', index);
+                    activeIndex.setValue(2);
+                    console.log('icon on press', index);
                     
                     // ref?.current?.scrollToIndex({
                     //   index,
@@ -113,7 +114,7 @@ const Detail = ({route, navigation}) => {
         })}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={ev => {
-          const newIndex = Math.floor(ev.nativeEvent.contentOffset.x / width);
+          const newIndex = Math.round(ev.nativeEvent.contentOffset.x / width);
           activeIndex.setValue(newIndex);
         }}
         renderItem={({item}) => {
@@ -128,7 +129,7 @@ const Detail = ({route, navigation}) => {
             >
               <View style={{padding: SPACING}}>
                 <Text style={{ fontSize: 16}}>
-                  {Array(50).fill(`${item.title} inner text \n`)}
+                  {Array(50).fill(`${item.title} inner text == ${item.id} \n`)}
                 </Text>
               </View>
             </ScrollView>

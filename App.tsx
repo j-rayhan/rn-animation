@@ -7,13 +7,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet, Text, View, Easing } from 'react-native';
 import List from './src/Screens/List'
 import Details from './src/Screens/Details'
+import TestAnimation from './src/Screens/TestAnimation'
 
 const Stack = createSharedElementStackNavigator();
 export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="list" headerMode="none">
+        <Stack.Navigator initialRouteName="List" headerMode="none">
+          <Stack.Screen name="JRAnimation" component={TestAnimation} />
           <Stack.Screen name="List" component={List} />
           <Stack.Screen name="Detail" component={Details} 
           options={() => ({
@@ -36,11 +38,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
