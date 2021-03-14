@@ -44,7 +44,7 @@ const [loaded] = useFonts({
   }
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Tabs">
+      <Drawer.Navigator initialRouteName="HomeFirst">
         <Drawer.Screen name="Home" component={TabBasickScreen} />
         <Drawer.Screen name="Auth" component={Auth} />
         <Drawer.Screen name="HomeFirst" component={HomeScreen} />

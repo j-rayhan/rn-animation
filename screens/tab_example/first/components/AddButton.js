@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import {
-  View, StyleSheet, TouchableHighlight, Animated
+  View, StyleSheet, TouchableWithoutFeedback, Animated
 } from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { FontAwesome5, Feather } from '@expo/vector-icons';
+import { Feather as Icon } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   button: {
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   touchable: {
     width: 72, height: 72, borderRadius: 36, alignItems: 'center', justifyContent: 'center'
   },
-  secoundaryButton: {
+  secondaryButton: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
@@ -50,8 +50,7 @@ const RenderIcon = ({translateX, translateY, iconName}) => (
       {transform: [{translateX}, {translateY}]},
     ]}>
     <View style={styles.secondaryButton}>
-      <IconEON
-        origin={ICON_TYPE.FEATHER_ICONS}
+      <Icon
         name={iconName}
         size={24}
         color="#FFF"
@@ -134,8 +133,7 @@ const AddButton = () => {
           style={styles.touchable}
           underlayColor="#7F58FF">
           <Animated.View style={{transform: [{rotate: rotation}]}}>
-            <IconEON
-              origin={ICON_TYPE.FEATHER_ICONS}
+            <Icon
               name="x"
               size={24}
               color="#FFF"
