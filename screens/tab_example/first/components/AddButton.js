@@ -40,101 +40,111 @@ const styles = StyleSheet.create({
   }
 });
 
-class AddButton extends Component {
- buttonSize = new Animated.Value(1);
+const RenderIcon = ({translateX, translateY, iconName}) => (
+  <Animated.View
+    style={[
+      {
+        ...StyleSheet.absoluteFillObject,
+        top: -20,
+      },
+      {transform: [{translateX}, {translateY}]},
+    ]}>
+    <View style={styles.secondaryButton}>
+      <IconEON
+        origin={ICON_TYPE.FEATHER_ICONS}
+        name={iconName}
+        size={24}
+        color="#FFF"
+      />
+    </View>
+  </Animated.View>
+);
+const AddButton = () => {
+  const buttonSize = useRef(new Animated.Value(1)).current;
+  const mode = useRef(new Animated.Value(0)).current;
 
- mode = new Animated.Value(0);
+  const [activeValue, setActiveValue] = useState(1);
 
- // eslint-disable-next-line react/state-in-constructor
- state = { activeValue: 1 }
+  const handlePress = () => {
+    setActiveValue((prevState) => (prevState === 0 ? 1 : 0));
+    Animated.sequence([
+      Animated.timing(buttonSize, {
+        toValue: 0.85,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonSize, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+      Animated.timing(mode, {
+        toValue: activeValue,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+  const rotation = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['45deg', '90deg'],
+  });
+  const thermometerX = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [10, -80],
+  });
+  const thermometerY = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-10, -60],
+  });
 
- handlePress = () => {
-   this.setState((prevState) => ({ activeValue: prevState.activeValue === 0 ? 1 : 0 }));
-   Animated.sequence([
-     Animated.timing(this.buttonSize, {
-       toValue: 0.85,
-       duration: 200,
-       useNativeDriver: true
-     }),
-     Animated.timing(this.buttonSize, {
-       toValue: 1,
-       useNativeDriver: true
-     }),
-     Animated.timing(this.mode, {
-       toValue: this.state.activeValue,
-       useNativeDriver: true
-     })
-   ]).start();
- }
-
- render() {
-   const sizeStyle = {
-     transform: [{ scale: this.buttonSize }]
-   };
-   const rotation = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: ['0deg', '45deg']
-   });
-   const thermometerX = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: [10, -80]
-   });
-   const thermometerY = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: [-10, -60]
-   });
-   const clockX = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: [10, 10]
-   });
-   const clockY = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: [-10, -120]
-   });
-   const pulseX = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: [10, 100]
-   });
-   const pulseY = this.mode.interpolate({
-     inputRange: [0, 1],
-     outputRange: [-10, -60]
-   });
-   return (
-     <View style={styles.button}>
-       <Animated.View style={[
-         { ...StyleSheet.absoluteFillObject, top: -20 },
-         { transform: [{ translateX: thermometerX, translateY: thermometerY }] }]}
-       >
-         <View style={styles.secoundaryButton}>
-           <Feather name="thermometer" size={24} color="#FFF" />
-         </View>
-       </Animated.View>
-       <Animated.View style={[
-         { ...StyleSheet.absoluteFillObject, top: -20 },
-         { transform: [{ translateX: clockX, translateY: clockY }] }]}
-       >
-         <View style={styles.secoundaryButton}>
-           <Feather name="clock" size={24} color="#FFF" />
-         </View>
-       </Animated.View>
-       <Animated.View style={[
-         { ...StyleSheet.absoluteFillObject, top: -20 },
-         { transform: [{ translateX: pulseX, translateY: pulseY }] }]}
-       >
-         <View style={styles.secoundaryButton}>
-           <Feather name="activity" size={24} color="#FFF" />
-         </View>
-       </Animated.View>
-       <Animated.View style={[styles.buttonPlus, sizeStyle]}>
-         <TouchableHighlight onPress={this.handlePress} style={styles.touchable} underlayColor="#7F58FF">
-           <Animated.View style={{ transform: [{ rotate: rotation }] }}>
-             <FontAwesome5 name="plus" size={24} color="#FFF" />
-           </Animated.View>
-         </TouchableHighlight>
-       </Animated.View>
-     </View>
-   );
- }
-}
+  const clockX = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [10, 10],
+  });
+  const clockY = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-10, -120],
+  });
+  const pulseX = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [10, 100],
+  });
+  const pulseY = mode.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-10, -60],
+  });
+  return (
+    <View style={styles.button}>
+      <RenderIcon
+        {...{
+          translateX: thermometerX,
+          translateY: thermometerY,
+          iconName: 'thermometer',
+        }}
+      />
+      <RenderIcon
+        {...{translateX: clockX, translateY: clockY, iconName: 'clock'}}
+      />
+      <RenderIcon
+        {...{translateX: pulseX, translateY: pulseY, iconName: 'activity'}}
+      />
+      <Animated.View
+        style={[styles.buttonPlus, {transform: [{scale: buttonSize}]}]}>
+        <TouchableWithoutFeedback
+          onPress={() => handlePress()}
+          style={styles.touchable}
+          underlayColor="#7F58FF">
+          <Animated.View style={{transform: [{rotate: rotation}]}}>
+            <IconEON
+              origin={ICON_TYPE.FEATHER_ICONS}
+              name="x"
+              size={24}
+              color="#FFF"
+            />
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </Animated.View>
+    </View>
+  );
+};
 
 export default AddButton;
